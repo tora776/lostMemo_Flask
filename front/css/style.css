@@ -1,0 +1,57 @@
+@import url('./style.css');
+
+table,
+table th,
+table td,
+table tr{
+    background: #eee;
+    border-collapse: collapse;
+    text-align: center;
+    border:1px solid #000000;
+    margin: auto;
+    padding: 10px 30px 10px 30px;
+}
+
+table tr:nth-child(odd) td {
+	background: #fff;
+}
+
+table tr:hover td{
+    background:cadetblue;
+}
+
+.button {
+    display: inline-block;
+    color: #fff;
+    background-color: #eb6100;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+}
+.button:hover{
+    color: #fff;
+    background: #f56500;
+  }
+.label-notice {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #ebebeb;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position:relative;
+    left: 330px;
+}
+
+/* formの位置調整 */
+form {
+    margin-top: -130px; /* 上方向に20px移動させる */
+}
+
+/* ラベルとフォーム要素のスタイル調整 */
+form label {
+    display: inline-block;
+    margin-bottom: 10px;
+}
