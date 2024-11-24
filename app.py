@@ -1,17 +1,42 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sql import DB
-from data import createJson, formGetValue, sortColumn, CheckGetValue, CheckGetColumn
+from data import createLostJson, formGetValue, sortColumn, CheckGetValue, CheckGetColumn
+import secrets
 
 app = Flask(__name__)
 CORS(app)
+
+# login処理
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    db = DB()
+    result = request.get_data()
+    dataList = sortColumn(result)
+    user_id = dataList[1][0]
+    ret = db.userCheck(dataList)
+    if not ret:
+        return "ユーザーIDかパスワードが異なります"
+    token = secrets.token_hex()
+    db.tokenRegister(user_id, token)
+    return token
+
+# 最終ログイン日時確認
+@app.route('/lastLoginCheck', methods=['POST', 'GET'])
+def lastLoginCheck():
+    db = DB()
+    result = request.get_data()
+    dataList = sortColumn(result)
+    ret = db.lastLoginCheckQuery(dataList)
+    print(ret)
+    return jsonify({'result': bool(ret)})
 
 # 全検索
 @app.route('/GetItem')
 def GetItems():
     db = DB()
     ret = db.selectAll()
-    return createJson(ret)
+    return createLostJson(ret)
 
 # 部分検索
 @app.route('/PostSortItem', methods=['POST', 'GET'])
@@ -20,7 +45,7 @@ def GetSelectItems():
     result = request.get_data()
     columnList = sortColumn(result)
     ret = db.select_data(columnList)
-    return createJson(ret) 
+    return createLostJson(ret) 
 
 # データ追加
 @app.route('/InsertItem', methods=['POST'])
@@ -39,7 +64,7 @@ def DeleteItems():
     idList_str = CheckGetValue(result)
     db.delete_data(idList_str)
     ret = db.selectAll()
-    return createJson(ret) 
+    return createLostJson(ret) 
 
 # データ更新
 @app.route('/UpdateItem', methods=['POST', 'GET'])
@@ -50,7 +75,7 @@ def UpdateItems():
     print(dataList, flush=True)
     db.update_data(dataList[0], dataList[1], dataList[2], dataList[3])
     ret = db.selectAll()
-    return createJson(ret) 
+    return createLostJson(ret) 
 
 
 

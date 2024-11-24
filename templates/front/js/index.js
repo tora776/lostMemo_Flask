@@ -3,12 +3,10 @@
  */
 
 // 検索ボタン押下処理
-document.getElementById("searchBtn").addEventListener('click', searchItem)
+document.getElementById("searchBtn").addEventListener('click', searchText)
 
-async function searchItem(ev){
+async function searchText(ev){
     ev.preventDefault();
-
-    getURI()
 
     const form = document.getElementById("inquiry");
     const formData = new FormData(form);
@@ -96,45 +94,5 @@ async function moveUpdatePage(ev){
   sessionStorage.setItem('checkedRows', checkedRows);
   window.location.href = 'update.html';
 };
-
-async function getURI(){
-    // 現在のページのクエリパラメータを取得
-    const params = new URLSearchParams(window.location.search);
-    // パラメータを取得
-    const user_id = params.get("user_id"); 
-    const token = params.get("token");
-    // JSONオブジェクト作成
-    var obj = {
-        "user_id": user_id,
-        "token": token
-    }
-    const loginJSON = JSON.stringify(obj, null);
-    
-    try {
-        // APIコール
-        const response = await window.fetch("http://127.0.0.1:5000/lastLoginCheck", {
-            method: "POST",
-            body: loginJSON,
-        });
-
-        window.alert("送信しました。");
-        // 処理結果を受け取る
-        const result = await response.json();
-
-        // bool値を取得
-        const isValid = result.result;
-        console.log("Result:", isValid);
-
-        // 必要に応じて処理
-        if (isValid == false) {
-            alert("再ログインしてください");
-            window.location.href = 'login.html';
-        }
-
-    } catch (e) {
-        console.log(e);
-    }
-
-}
 
 

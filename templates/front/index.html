@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <title>なくし物メモ</title>
+    <h1>なくし物メモ</h1>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+  </head>
+  <body>
+    <div class="label-container"></div>
+      <label class="label-notice">
+        説明
+        <br>
+        ・[検索]ボタンで自分がなくした物に関するデータを検索できます。
+        <br>
+        ・[追加]ボタンで自分がなくした物に関するデータを追加できます。
+        <br>
+        ・✅を入力後、[削除]ボタンで自分がなくした物に関するデータを削除できます。
+        <br>
+        ・✅を入力後、[更新]ボタンで自分がなくした物に関するデータを更新できます。
+      </label>
+    </div>
+    <form id="inquiry">
+      <label>
+          なくしたもの
+          <input type="text" name="items">
+      </label>
+      <br>
+      <label>
+          なくした場所
+          <input type="text" name="places">
+      </label>
+      <br>
+      <label>
+          詳細な場所　
+          <input type="text" name="detailed_places">
+      </label>
+      <br></br>
+      <input type="button" class="button" id="searchBtn" value="検索">
+      <input type="button" class="button" id="insertBtn" value="追加">
+      <input type="button" class="button" id="deleteBtn" value="削除">
+      <input type="button" class="button" id="updateBtn" value="更新">
+  </form>
+    <div id="view"></div>
+      <table id="maintable">
+      </table>
+    <script src="js/jsonTable.js"></script>
+    <script src="js/index.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+  </body>
+</html>

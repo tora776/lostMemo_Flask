@@ -1,3 +1,14 @@
+function select_data(url) {
+  fetch(url)
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function (json) {
+   makeTable(json);
+   setupRowClickEvent();
+  });
+}
+
 function makeTable(json){
 
   // maintable要素の中身をクリア
@@ -94,7 +105,6 @@ function getCheckedRows() {
       }
   }
 
-  console.log("Checked Rows:", checkedRows);
   // 必要に応じてここで取得したデータを処理する
   return checkedRows;
 }

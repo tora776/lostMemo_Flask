@@ -3,7 +3,7 @@ from sql import DB
 from datetime import date, datetime
 from flask import request
     
-def createJson(ret):
+def createLostJson(ret):
     df = pd.DataFrame(ret, columns = ['id', 'date', 'items', 'places', 'detailed_places'])
     dict = df.to_dict(orient="records")
     # date型, datetime型はjsonシリアライズができない

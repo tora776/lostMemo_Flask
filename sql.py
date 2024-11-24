@@ -98,7 +98,7 @@ class DB():
         #################
         # Query生成
         #################
-        query = f'SELECT {colStr} FROM {table} ORDER BY id'
+        query = f'SELECT {colStr} FROM {table}'
         if not conditionStr == '':
             query = f'{query} WHERE {conditionStr}'
 
@@ -125,11 +125,13 @@ class DB():
         for val in vals:
             if valStr == '':
                 valStr = f"'{val}'"
+            
             else:
                 if val == 'CURRENT_TIMESTAMP':  # CURRENT_TIMESTAMPの場合はクォーテーションを外す
                     valStr = f'{valStr}, {val}'
                 else:
                     valStr = f'{valStr}, \'{val}\''
+            
         #################
         # Query生成
         #################
@@ -194,6 +196,7 @@ class DB():
         table = 'losts'
         cols = ['id', "to_char(date, 'YYYYMMDD')", 'items', 'places', 'detailed_places']
         query = self.selectQuery(table, cols)
+        query += " ORDER BY id"
         # Query実行
         ret = self.sqlSelectExcute(query)
         return ret   
@@ -208,6 +211,7 @@ class DB():
         condition_vals = columnList[1]
         query = self.selectQuery(table, cols, condition_cols, condition_vals)
         # Query実行
+        query += " ORDER BY id"
         ret = self.sqlSelectExcute(query)
         return ret   
 
@@ -222,21 +226,6 @@ class DB():
         ret = self.sqlExcute(query)
         
         return ret
-    '''
-    # データ更新
-    def update_data(self, idList, items, places, detailed_places):
-        # Query作成
-        table = 'losts'
-        cols = ['items', 'places', 'detailed_places']
-        vals = [f"'{items}'", f"'{places}'", f"'{detailed_places}'"]
-        condition_cols = ['id']
-        condition_vals = idList
-        query = self.updateQuery(table, cols, vals, condition_cols, condition_vals)
-        # Query実行
-        ret = self.sqlExcute(query)
-        
-        return ret
-    '''
 
         # データ更新
     def update_data(self, idList, itemList, placeList, detailed_placeList):
@@ -263,4 +252,38 @@ class DB():
         # Query実行
         ret = self.sqlExcute(query)
         
+        return ret
+    
+    # ログインの際ユーザーが存在するか確認
+    def userCheck(self, columnList):
+        # Query作成
+        table = 'users'
+        cols = ['user_id', 'password']
+        condition_cols = columnList[0]
+        condition_vals = columnList[1]
+        query = self.selectQuery(table, cols, condition_cols, condition_vals)
+        # Query実行
+        ret = self.sqlSelectExcute(query)
+        return ret
+    
+    def tokenRegister(self, user_id, token):
+        # Query作成
+        table = 'login_checks'
+        cols = ['user_id', 'token','login_date']
+        vals = [user_id, token, 'CURRENT_TIMESTAMP']
+        query = self.insertQuery(table, cols, vals)
+        print(query)
+        # Query実行
+        ret = self.sqlExcute(query)
+        return ret
+    
+    def lastLoginCheckQuery(self, columnList):
+        # Query作成
+        table = 'login_checks'
+        cols = ['user_id', 'token','login_date']
+        condition_cols = columnList[0]
+        condition_vals = columnList[1]
+        query = self.selectQuery(table, cols, condition_cols, condition_vals)
+        # Query実行
+        ret = self.sqlSelectExcute(query)
         return ret
