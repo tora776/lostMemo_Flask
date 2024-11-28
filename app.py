@@ -28,8 +28,12 @@ def lastLoginCheck():
     result = request.get_data()
     dataList = sortColumn(result)
     ret = db.lastLoginCheckQuery(dataList)
-    print(ret)
-    return jsonify({'result': bool(ret)})
+    # クエリ結果が存在しない場合、Falseを返す。Noneの想定。
+    if not ret[0][0]:
+        return jsonify({'result': False})
+    # トークン発行から24時間以上経っている場合、Falseを返す。
+
+    return jsonify({'result': True})
 
 # 全検索
 @app.route('/GetItem')

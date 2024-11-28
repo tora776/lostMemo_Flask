@@ -22,9 +22,9 @@ async function loginCheck(ev){
             const user_id = document.getElementById("user_id").value;
 
             // tokenをサーバから受け取りリダイレクトする。
-            const token = await response.text()
+            const token = await response.text();
             if(token != null){
-                window.location.href = 'index.html' + '?userid=' + user_id + "&token=" + token;
+                window.location.href = 'index.html' + '?user_id=' + user_id + "&token=" + token;
             }
 
         } catch (e) {

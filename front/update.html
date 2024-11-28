@@ -1,30 +1,16 @@
 <html>
   <head>
-    <title>APIテスト</title>
+    <title>なくし物メモ</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
   <body>
-    <form id="inquiry">
-      <label>
-          なくしたもの
-          <input type="text" name="items">
-      </label>
-      <label>
-          なくした場所
-          <input type="text" name="places">
-      </label>
-      <label>
-          詳細な場所
-          <input type="text" name="detailed_places">
-      </label>
-  </form>
-  <input type="button" id="indexBtn" value="indexに戻る">
+  <input type="button" class="button" id="indexBtn" value="キャンセル">
     <div id="view"></div>
-    <h1>テーブル表示</h1>
+    <h1>なくし物メモ</h1>
       <table id="Formtable">
       </table>
       <a href="./index.html#maintable"></a>
-      <input type="button" id="changeBtn" value="送信">
+      <input type="button" class="button" id="changeBtn" value="送信">
   </body>
   <script src="js/jsonTable.js"></script>
   <script src="js/update.js"></script>

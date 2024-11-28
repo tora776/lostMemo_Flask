@@ -280,10 +280,11 @@ class DB():
     def lastLoginCheckQuery(self, columnList):
         # Query作成
         table = 'login_checks'
-        cols = ['user_id', 'token','login_date']
+        cols = ['MAX(login_date)']
         condition_cols = columnList[0]
         condition_vals = columnList[1]
         query = self.selectQuery(table, cols, condition_cols, condition_vals)
+        print(query)
         # Query実行
         ret = self.sqlSelectExcute(query)
         return ret

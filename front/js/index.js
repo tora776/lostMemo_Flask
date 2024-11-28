@@ -8,7 +8,7 @@ document.getElementById("searchBtn").addEventListener('click', searchItem)
 async function searchItem(ev){
     ev.preventDefault();
 
-    getURI()
+    getURI();
 
     const form = document.getElementById("inquiry");
     const formData = new FormData(form);
@@ -21,8 +21,8 @@ async function searchItem(ev){
                 body: JSON.stringify(data, ["items", "places", "detailed_places"]),
             });
 
-            const json = await response.json()
-            makeTable(json)
+            const json = await response.json();
+            makeTable(json);
 
         } catch (e) {
             console.log(e);
@@ -30,9 +30,9 @@ async function searchItem(ev){
     };
 
 // 追加ボタン押下処理
-document.getElementById("insertBtn").addEventListener('click', insertText)
+document.getElementById("insertBtn").addEventListener('click', insertItem)
 
-async function insertText(ev){
+async function insertItem(ev){
     ev.preventDefault();
 
     const form = document.getElementById("inquiry");
@@ -62,9 +62,9 @@ async function insertText(ev){
 };
 
 // 削除ボタン押下処理
-document.getElementById("deleteBtn").addEventListener('click', deleteText)
+document.getElementById("deleteBtn").addEventListener('click', deleteItem)
 
-async function deleteText(ev){
+async function deleteItem(ev){
     ev.preventDefault();
     checkedRows = getCheckedRows();
 
@@ -77,8 +77,8 @@ async function deleteText(ev){
 
         window.alert("送信しました。");
 
-        const json = await response.json()
-        makeTable(json)
+        const json = await response.json();
+        makeTable(json);
 
     } catch (e) {
         console.log(e);
@@ -117,24 +117,25 @@ async function getURI(){
             body: loginJSON,
         });
 
-        window.alert("送信しました。");
         // 処理結果を受け取る
         const result = await response.json();
 
         // bool値を取得
         const isValid = result.result;
         console.log("Result:", isValid);
-
+        
+        
         // 必要に応じて処理
         if (isValid == false) {
-            alert("再ログインしてください");
+            alert("トークンの期限が切れています。再ログインしてください");
             window.location.href = 'login.html';
         }
+        
 
     } catch (e) {
         console.log(e);
     }
 
-}
+};
 
 
