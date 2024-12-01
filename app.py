@@ -1,14 +1,14 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from sql import DB
 from data import createLostJson, formGetValue, sortColumn, CheckGetValue, CheckGetColumn
-import secrets
+import secrets, jwt, datetime, hashlib
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 # login処理
-@app.route('/login', methods=['POST', 'GET'])
+@app.route('/login', methods=['POST'])
 def login():
     db = DB()
     result = request.get_data()
@@ -18,8 +18,11 @@ def login():
     if not ret:
         return "ユーザーIDかパスワードが異なります"
     token = secrets.token_hex()
-    db.tokenRegister(user_id, token)
-    return token
+    user_id_hash = hashlib.sha256(user_id.encode("utf-8")).hexdigest()
+    token_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
+    db.tokenRegister(user_id_hash, token_hash)
+    
+    return jsonify({'user_id': user_id_hash, 'token':token_hash})
 
 # 最終ログイン日時確認
 @app.route('/lastLoginCheck', methods=['POST', 'GET'])
@@ -34,6 +37,18 @@ def lastLoginCheck():
     # トークン発行から24時間以上経っている場合、Falseを返す。
 
     return jsonify({'result': True})
+
+# ユーザー作成
+@app.route('/createUser', methods=['POST'])
+def createUser():
+    db = DB()
+    result = request.get_data()
+    dataList = sortColumn(result)
+    user_id = hashlib.sha256(dataList[1][0].encode("utf-8")).hexdigest()
+    password = hashlib.sha256(dataList[1][1].encode("utf-8")).hexdigest()
+    ret = db.createUser(user_id, password)
+    return jsonify({'result': ret})
+    
 
 # 全検索
 @app.route('/GetItem')

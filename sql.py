@@ -288,3 +288,14 @@ class DB():
         # Query実行
         ret = self.sqlSelectExcute(query)
         return ret
+    
+    def createUser(self, user_id, password):
+        # Query作成
+        table = 'users'
+        cols = ['user_id', 'password']
+        vals = [user_id, password]
+        query = self.insertQuery(table, cols, vals)
+        print(query)
+        # Query実行
+        ret = self.sqlExcute(query)
+        return ret
