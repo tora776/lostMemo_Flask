@@ -284,7 +284,6 @@ class DB():
         condition_cols = columnList[0]
         condition_vals = columnList[1]
         query = self.selectQuery(table, cols, condition_cols, condition_vals)
-        print(query)
         # Query実行
         ret = self.sqlSelectExcute(query)
         return ret
@@ -295,7 +294,6 @@ class DB():
         cols = ['user_id', 'password']
         vals = [user_id, password]
         query = self.insertQuery(table, cols, vals)
-        print(query)
         # Query実行
         ret = self.sqlExcute(query)
         return ret

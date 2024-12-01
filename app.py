@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sql import DB
 from data import createLostJson, formGetValue, sortColumn, CheckGetValue, CheckGetColumn
-import secrets, jwt, datetime, hashlib
+import secrets, datetime, hashlib
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -35,7 +35,9 @@ def lastLoginCheck():
     if not ret[0][0]:
         return jsonify({'result': False})
     # トークン発行から24時間以上経っている場合、Falseを返す。
-
+    dt1 = datetime.datetime.now() - ret[0][0]
+    if dt1.seconds > 86400:
+        return jsonify({'result': False})
     return jsonify({'result': True})
 
 # ユーザー作成
