@@ -84,17 +84,15 @@ function transformArray(arr) {
     // update.htmlにてindexに戻るボタンを押した際の処理
 document.getElementById("indexBtn").addEventListener('click', indexBack)
 
-function indexBack(){
-        indexBtn.addEventListener("click", async ev => {
-            ev.preventDefault();
-            // 現在のページのクエリパラメータを取得
-            const params = new URLSearchParams(window.location.search);
-            // パラメータを取得
-            const user_id = params.get("user_id"); 
-            const token = params.get("token");
-            // index.htmlへ遷移
-            window.location.href = 'index.html'　+ '?user_id=' + user_id + "&token=" + token;
-        });
+function indexBack(ev){
+    ev.preventDefault();
+    // 現在のページのクエリパラメータを取得
+    const params = new URLSearchParams(window.location.search);
+    // パラメータを取得
+    const user_id = params.get("user_id"); 
+    const token = params.get("token");
+    // index.htmlへ遷移
+    window.location.href = 'index.html'　+ '?user_id=' + user_id + "&token=" + token;
 };
 
 function makeUpdateJson(){

@@ -14,15 +14,17 @@ def login():
     result = request.get_data()
     dataList = sortColumn(result)
     user_id = dataList[1][0]
-    ret = db.userCheck(dataList)
+    password = dataList[1][1]
+    password_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+    ret = db.userCheck(user_id, password_hash)
     if not ret:
         return "ユーザーIDかパスワードが異なります"
     token = secrets.token_hex()
+    # ユーザーIDはハッシュ化してはいけない。元に戻せない。
     user_id_hash = hashlib.sha256(user_id.encode("utf-8")).hexdigest()
-    token_hash = hashlib.sha256(token.encode("utf-8")).hexdigest()
-    db.tokenRegister(user_id_hash, token_hash)
+    db.tokenRegister(user_id_hash, token)
     
-    return jsonify({'user_id': user_id_hash, 'token':token_hash})
+    return jsonify({'user_id': user_id_hash, 'token':token})
 
 # 最終ログイン日時確認
 @app.route('/lastLoginCheck', methods=['POST', 'GET'])
@@ -46,9 +48,10 @@ def createUser():
     db = DB()
     result = request.get_data()
     dataList = sortColumn(result)
-    user_id = hashlib.sha256(dataList[1][0].encode("utf-8")).hexdigest()
-    password = hashlib.sha256(dataList[1][1].encode("utf-8")).hexdigest()
-    ret = db.createUser(user_id, password)
+    user_id = dataList[1][0]
+    password = dataList[1][1]
+    password_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
+    ret = db.createUser(user_id, password_hash)
     return jsonify({'result': ret})
     
 

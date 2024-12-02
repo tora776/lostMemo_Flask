@@ -254,12 +254,12 @@ class DB():
         return ret
     
     # ログインの際ユーザーが存在するか確認
-    def userCheck(self, columnList):
+    def userCheck(self, user_id, password):
         # Query作成
         table = 'users'
         cols = ['user_id', 'password']
-        condition_cols = columnList[0]
-        condition_vals = columnList[1]
+        condition_cols = ['user_id', 'password']
+        condition_vals = [user_id, password]
         query = self.selectQuery(table, cols, condition_cols, condition_vals)
         # Query実行
         ret = self.sqlSelectExcute(query)

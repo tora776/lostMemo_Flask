@@ -48,7 +48,7 @@ function makeTable(json){
     // var tr=document.createElement('tr');
     var td=document.createElement('td');
     // document.querySelector('#maintable').appendChild(tr);
-    td.appendChild(ch)
+    td.appendChild(ch);
     tr.appendChild(td); 
 
     // th・td部分のループ
@@ -104,7 +104,6 @@ function getCheckedRows() {
           checkedRows.push(rowData);
       }
   }
-
   // 必要に応じてここで取得したデータを処理する
   return checkedRows;
 }
