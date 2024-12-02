@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sql import DB
-from data import createLostJson, formGetValue, sortColumn, CheckGetValue, CheckGetColumn
+from data import createLostJson, getInsertList, sortColumn, getDeleteList, getUpdateList
 import secrets, datetime, hashlib
 
 app = Flask(__name__)
@@ -60,7 +60,7 @@ def GetItems():
     return createLostJson(ret)
 
 # 部分検索
-@app.route('/PostSortItem', methods=['POST', 'GET'])
+@app.route('/SortItem', methods=['POST', 'GET'])
 def GetSelectItems():
     db = DB()
     result = request.get_data()
@@ -72,9 +72,9 @@ def GetSelectItems():
 @app.route('/InsertItem', methods=['POST'])
 def InsertItems():
     result = request.get_data()
-    dataList = formGetValue(result)
+    dataList = getInsertList(result)
     db = DB()
-    db.insert_data(dataList[0], dataList[1], dataList[2])
+    db.insert_data(dataList[0], dataList[1], dataList[2], dataList[3])
     return dataList
 
 # データ削除
@@ -82,21 +82,22 @@ def InsertItems():
 def DeleteItems():
     db = DB()
     result = request.get_data()
-    idList_str = CheckGetValue(result)
-    db.delete_data(idList_str)
-    ret = db.selectAll()
-    return createLostJson(ret) 
+    idList_str = getDeleteList(result)
+    ret = db.delete_data(idList_str)
+    # ret = db.selectAll()
+    #return createLostJson(ret) 
+    return jsonify({'result': ret})
 
 # データ更新
 @app.route('/UpdateItem', methods=['POST', 'GET'])
 def UpdateItems():
     db = DB()
     result = request.get_data()
-    dataList = CheckGetColumn(result)
-    print(dataList, flush=True)
-    db.update_data(dataList[0], dataList[1], dataList[2], dataList[3])
-    ret = db.selectAll()
-    return createLostJson(ret) 
+    dataList = getUpdateList(result)
+    ret = db.update_data(dataList[0], dataList[1], dataList[2], dataList[3])
+    # ret = db.selectAll()
+    # return createLostJson(ret)
+    return jsonify({'result': ret})
 
 
 

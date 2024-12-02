@@ -21,14 +21,15 @@ def json_serial(obj):
 
 
 # テキストボックスから受け取ったデータを抽出
-def formGetValue(res):
+def getInsertList(res):
     dictForm = json.loads(res)
     valueList = []
     valueList = list(dictForm.values()) 
+    print(valueList)
     return valueList
 
 # チェックがついているidを抽出
-def CheckGetValue(res):
+def getDeleteList(res):
     checkList = json.loads(res)
     idList = []
     for i in range(len(checkList)):
@@ -36,7 +37,7 @@ def CheckGetValue(res):
     idList_str = ",".join(idList)
     return idList_str
 
-def CheckGetColumn(res):
+def getUpdateList(res):
     checkList = json.loads(res)
     idList = []
     itemList = []

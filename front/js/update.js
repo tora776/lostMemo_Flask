@@ -87,7 +87,13 @@ document.getElementById("indexBtn").addEventListener('click', indexBack)
 function indexBack(){
         indexBtn.addEventListener("click", async ev => {
             ev.preventDefault();
-            window.location.href='index.html'
+            // 現在のページのクエリパラメータを取得
+            const params = new URLSearchParams(window.location.search);
+            // パラメータを取得
+            const user_id = params.get("user_id"); 
+            const token = params.get("token");
+            // index.htmlへ遷移
+            window.location.href = 'index.html'　+ '?user_id=' + user_id + "&token=" + token;
         });
 };
 
@@ -133,14 +139,11 @@ async function updateSendServer(ev){
           const json = await response.json()
         
           sessionStorage.setItem('json', json);
-          window.location.href = 'index.html';
+          // index.htmlに遷移する
+          indexBack();
 
-          const allQuery = sessionStorage.getItem('json');
-          
-          // document.addEventListener('DOMContentLoaded', () => {
-          //  if (window.location.pathname.endsWith('index.html')) {
-
-          makeTable(allQuery);
+          //const allQuery = sessionStorage.getItem('json');
+          //makeTable(allQuery);
           //  });
 
       } catch (e) {

@@ -7,18 +7,17 @@ document.getElementById("searchBtn").addEventListener('click', searchItem)
 
 async function searchItem(ev){
     ev.preventDefault();
+    // トークンと最終ログイン日時をチェックする
+    checkToken();
 
-    getURI();
-
-    const form = document.getElementById("inquiry");
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    const sendDataJson = makeSendJson();
 
         try {
             // APIコール
-            const response = await window.fetch("http://127.0.0.1:5000/PostSortItem", {
+            const response = await window.fetch("http://127.0.0.1:5000/SortItem", {
                 method: "POST",
-                body: JSON.stringify(data, ["items", "places", "detailed_places"]),
+                // body: JSON.stringify(data, ["items", "places", "detailed_places"]),
+                body: sendDataJson,
             });
 
             const json = await response.json();
@@ -34,10 +33,10 @@ document.getElementById("insertBtn").addEventListener('click', insertItem)
 
 async function insertItem(ev){
     ev.preventDefault();
-
-    const form = document.getElementById("inquiry");
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    // トークンと最終ログイン日時をチェックする
+    checkToken();
+    // 追加するデータを作成する
+    const sendDataJson = makeSendJson();
 
     try {
         // APIコール
@@ -46,15 +45,18 @@ async function insertItem(ev){
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data, ["items", "places", "detailed_places"]),
+            body: sendDataJson,
         });
 
         window.alert("送信しました。");
 
         // 完了時に入力値をクリア
-        form.reset();
-
-        select_data('http://127.0.0.1:5000/GetItem');
+        // form.reset();
+        document.getElementById("item").value = "";
+        document.getElementById("place").value = "";
+        document.getElementById("detailed_place").value = "";
+        // テーブル作成
+        searchItem(ev);
 
     } catch (e) {
         console.log(e);
@@ -66,6 +68,9 @@ document.getElementById("deleteBtn").addEventListener('click', deleteItem)
 
 async function deleteItem(ev){
     ev.preventDefault();
+    // トークンと最終ログイン日時をチェックする
+    checkToken();
+    // チェックボックスの行を取得する
     checkedRows = getCheckedRows();
 
     try {
@@ -78,7 +83,7 @@ async function deleteItem(ev){
         window.alert("送信しました。");
 
         const json = await response.json();
-        makeTable(json);
+        searchItem(ev);
 
     } catch (e) {
         console.log(e);
@@ -94,10 +99,16 @@ async function moveUpdatePage(ev){
   // チェックボックスの値をセッションストレージに保存。
   const checkedRows = getCheckedRows();
   sessionStorage.setItem('checkedRows', checkedRows);
-  window.location.href = 'update.html';
+  // 現在のページのクエリパラメータを取得
+  const params = new URLSearchParams(window.location.search);
+  // パラメータを取得
+  const user_id = params.get("user_id"); 
+  const token = params.get("token");
+  // update.htmlへ遷移
+  window.location.href = 'update.html'　+ '?user_id=' + user_id + "&token=" + token;
 };
 
-async function getURI(){
+async function checkToken(){
     // 現在のページのクエリパラメータを取得
     const params = new URLSearchParams(window.location.search);
     // パラメータを取得
@@ -109,7 +120,7 @@ async function getURI(){
         "token": token
     }
     const loginJSON = JSON.stringify(obj, null);
-    
+
     try {
         // APIコール
         const response = await window.fetch("http://127.0.0.1:5000/lastLoginCheck", {
@@ -138,4 +149,23 @@ async function getURI(){
 
 };
 
+function makeSendJson(){
+    // 現在のページのクエリパラメータを取得
+    const params = new URLSearchParams(window.location.search);
+    // パラメータを取得
+    const user_id = params.get("user_id"); 
+    const item = document.getElementById("item").value;
+    const place = document.getElementById("place").value;
+    const detailed_place = document.getElementById("detailed_place").value;
 
+    // JSONオブジェクト作成
+    var obj = {
+        "user_id": user_id,
+        "items": item,
+        "places": place,
+        "detailed_places": detailed_place
+    }
+    const sendDataJson = JSON.stringify(obj, null);
+
+    return sendDataJson;
+}

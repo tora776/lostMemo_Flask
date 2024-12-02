@@ -205,7 +205,6 @@ class DB():
     def select_data(self, columnList):
         # Query作成
         table = 'losts'
-        # cols = ['id', 'date', 'items', 'places', 'detailed_places']
         cols = ['id', "to_char(date, 'YYYYMMDD')", 'items', 'places', 'detailed_places']
         condition_cols = columnList[0]
         condition_vals = columnList[1]
@@ -216,11 +215,11 @@ class DB():
         return ret   
 
     # データ追加        
-    def insert_data(self, items, places, detailed_places):
+    def insert_data(self, user_id, items, places, detailed_places):
         # Query作成
         table = 'losts'
         cols = ['user_id', 'date', 'items', 'places', 'detailed_places']
-        vals = ['user1', 'CURRENT_TIMESTAMP', items, places, detailed_places]
+        vals = [user_id, 'CURRENT_TIMESTAMP', items, places, detailed_places]
         query = self.insertQuery(table, cols, vals)
         # Query実行
         ret = self.sqlExcute(query)
