@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from sql import DB
-from data import createLostJson, getInsertList, sortColumn, getDeleteList, getUpdateList
+from data import createLostJson, getInsertList, sortColumn, getDeleteList, getUpdateList, encrypt, decrypt
 import secrets, datetime, hashlib
 
 app = Flask(__name__)
@@ -20,8 +20,10 @@ def login():
     if not ret:
         return "ユーザーIDかパスワードが異なります"
     token = secrets.token_hex()
-    # ユーザーIDはハッシュ化してはいけない。元に戻せない。
+    # ユーザーIDはハッシュ化してはいけない。元に戻せない。要修正。
     user_id_hash = hashlib.sha256(user_id.encode("utf-8")).hexdigest()
+    # 暗号化
+    #encrypted_user_id = encrypt(user_id, "fb57965850625a43d1f1fcb278e957f848f4e77ae3634160eab46a3446e6eb99")
     db.tokenRegister(user_id_hash, token)
     
     return jsonify({'user_id': user_id_hash, 'token':token})
@@ -38,6 +40,7 @@ def lastLoginCheck():
         return jsonify({'result': False})
     # トークン発行から24時間以上経っている場合、Falseを返す。
     dt1 = datetime.datetime.now() - ret[0][0]
+    print(dt1.seconds)
     if dt1.seconds > 86400:
         return jsonify({'result': False})
     return jsonify({'result': True})
@@ -48,8 +51,10 @@ def createUser():
     db = DB()
     result = request.get_data()
     dataList = sortColumn(result)
-    user_id = dataList[1][0]
-    password = dataList[1][1]
+    if dataList[1][0] != '':
+        user_id = dataList[1][0]
+    if dataList[1][1] != '':
+        password = dataList[1][1]
     password_hash = hashlib.sha256(password.encode("utf-8")).hexdigest()
     ret = db.createUser(user_id, password_hash)
     return jsonify({'result': ret})
@@ -63,7 +68,7 @@ def GetItems():
     return createLostJson(ret)
 
 # 部分検索
-@app.route('/SortItem', methods=['POST', 'GET'])
+@app.route('/SortItem', methods=['POST'])
 def GetSelectItems():
     db = DB()
     result = request.get_data()
@@ -81,7 +86,7 @@ def InsertItems():
     return dataList
 
 # データ削除
-@app.route('/DeleteItem', methods=['POST', 'GET'])
+@app.route('/DeleteItem', methods=['POST'])
 def DeleteItems():
     db = DB()
     result = request.get_data()
@@ -92,7 +97,7 @@ def DeleteItems():
     return jsonify({'result': ret})
 
 # データ更新
-@app.route('/UpdateItem', methods=['POST', 'GET'])
+@app.route('/UpdateItem', methods=['POST'])
 def UpdateItems():
     db = DB()
     result = request.get_data()

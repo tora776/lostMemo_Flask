@@ -81,7 +81,7 @@ function transformArray(arr) {
     document.getElementById('Formtable').appendChild(table);
   }
 
-    // update.htmlにてindexに戻るボタンを押した際の処理
+// update.htmlにてindexに戻るボタンを押した際の処理
 document.getElementById("indexBtn").addEventListener('click', indexBack)
 
 function indexBack(ev){
@@ -92,7 +92,7 @@ function indexBack(ev){
     const user_id = params.get("user_id"); 
     const token = params.get("token");
     // index.htmlへ遷移
-    window.location.href = 'index.html'　+ '?user_id=' + user_id + "&token=" + token;
+    window.location.href = 'index.html' + '?user_id=' + user_id + "&token=" + token;
 };
 
 function makeUpdateJson(){
@@ -105,8 +105,11 @@ function makeUpdateJson(){
             var cells = rows[i].getElementsByTagName('td');
             for (var j = 0; j < cells.length; j++) { 
                 if(cells[j].innerHTML.indexOf('input') != -1) {
+                  // テキストボックスの場合
+                  checkLostTextFormat(cells[j].firstElementChild.value);
                   rowData.push(cells[j].firstElementChild.value);
                 } else if(cells.textContent!="")  {
+                  // id・dateの場合
                   rowData.push(cells[j].textContent);
                 }
             }
@@ -138,7 +141,7 @@ async function updateSendServer(ev){
         
           sessionStorage.setItem('json', json);
           // index.htmlに遷移する
-          indexBack();
+          indexBack(ev);
 
           //const allQuery = sessionStorage.getItem('json');
           //makeTable(allQuery);

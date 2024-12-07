@@ -23,16 +23,19 @@
       <label>
           なくしたもの
           <input type="text" name="items" id="item">
+          <span class="error-message" id="error_item"></span>
       </label>
       <br>
       <label>
           なくした場所
           <input type="text" name="places" id="place">
+          <span class="error-message" id="error_place"></span>
       </label>
       <br>
       <label>
           詳細な場所　
           <input type="text" name="detailed_places" id="detailed_place">
+          <span class="error-message" id="error_detailed_place"></span>
       </label>
       <br></br>
       <input type="button" class="button" id="searchBtn" value="検索">
@@ -43,8 +46,8 @@
     <div id="view"></div>
       <table id="maintable">
       </table>
-    <script src="js/jsonTable.js"></script>
     <script src="js/index.js"></script>
+    <script src="js/utils.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
   </body>
 </html>

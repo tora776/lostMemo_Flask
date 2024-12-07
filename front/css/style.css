@@ -45,6 +45,12 @@ table tr:hover td{
     /* left: 330px; */
 }
 
+.error-message {
+    color: red;
+    margin-left: 10px; /* 入力欄から少し間隔を空ける */
+    font-size: 0.9em; /* 少し小さめのフォントサイズ */
+}
+
 /* formの位置調整 */
 /*
 form {

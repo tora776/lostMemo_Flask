@@ -37,7 +37,7 @@ async function insertItem(ev){
     checkToken();
 
     // エラーチェック
-    var ret = errorCheck();
+    var ret = indexErrorCheck();
     if(ret == false){
         return;
     }
@@ -120,7 +120,7 @@ async function moveUpdatePage(ev){
   const user_id = params.get("user_id"); 
   const token = params.get("token");
   // update.htmlへ遷移
-  window.location.href = 'update.html'　+ '?user_id=' + user_id + "&token=" + token;
+  window.location.href = 'update.html' + '?user_id=' + user_id + "&token=" + token;
 };
 
 async function checkToken(){
@@ -185,39 +185,17 @@ function makeSendJson(){
     return sendDataJson;
 }
 
-function errorCheck(){
+// エラーチェック
+function indexErrorCheck(){
     // テキストボックスに値が格納されているか確認する
-    var ret_item = true;
-    var ret_place = true;
-    var ret_detailed_Place = true;
-    ret_item = checkInputText("item");
-    ret_place = checkInputText("place");
-    ret_detailed_Place = checkInputText("detailed_place");
-    if (ret_item == false || ret_place == false || ret_detailed_Place == false){
-        return false;
-    }
+    let isValid = true;
 
-    var ret = checkInputCheckBox();
-    if(ret == false){
-        return false;
-    }
-}
+    // 入力値の書式確認
+    if (!checkLostTextFormat("item", "error_item")) isValid = false;
+    if (!checkLostTextFormat("place", "error_place")) isValid = false;
+    if (!checkLostTextFormat("detailed_place", "error_detailed_place")) isValid = false;
 
-
-
-function checkInputText(input_id){ 
-    var bool = true;
-
-    const input = document.getElementById(input_id);
-    if (input.value == ""){
-        input.style.backgroundColor = '#fcc';
-        input.placeholder = '入力値が空です'
-        bool = false;
-    } else {
-        input.style.backgroundColor = '#fff';
-    }
-
-    return bool
+    return isValid
 }
 
 function checkInputCheckBox(checkBox_id){ 
