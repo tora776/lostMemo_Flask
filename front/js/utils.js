@@ -123,7 +123,9 @@ function setupRowClickEvent(){
 
     // テーブル内の各行にクリックイベントリスナーを追加
     for (const row of rows) {
-      row.addEventListener("click", function (event) {
+        row.addEventListener("click", function (event) {
+
+        console.log(event.target.type)
         // 行の先頭にあるチェックボックスを取得
         const checkbox = this.cells[0].querySelector("input[type='checkbox']");
         
@@ -134,6 +136,7 @@ function setupRowClickEvent(){
       });
     }
 }
+
   
 // チェックした行を取得する
 function getCheckedRows() {
