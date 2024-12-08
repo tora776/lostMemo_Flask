@@ -56,7 +56,8 @@ function select_data(url) {
      setupRowClickEvent();
     });
   }
-  
+
+// テーブルを作成する
 function makeTable(json){
   
     // maintable要素の中身をクリア
@@ -138,12 +139,13 @@ function setupRowClickEvent(){
 }
 
   
-// チェックした行を取得する
+// index.htmlでチェックした行を取得する
 function getCheckedRows() {
+
     var table = document.getElementById('maintable');
     var rows = table.getElementsByTagName('tr');
     var checkedRows = [];
-  
+    
     for (var i = 1; i < rows.length; i++) { 
         // ヘッダー行をスキップ
         var checkbox = rows[i].getElementsByTagName('input')[0];
@@ -164,12 +166,13 @@ function getCheckedRows() {
 // 紛失物のテキストボックスの書式をチェックする
 function checkLostTextFormat(input_id, error_id){
     let bool = true;
+    // アルファベット大文字・小文字・数字・日本語・「-」「･」「_」のみ許可
     var pattern = /^[a-zA-Z0-9\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf-･_]+$/;
     const maxLength = 100; // 最大文字数
-    const input = document.getElementById(input_id);
-    // 初期化処理
+    const input = document.getElementById(input_id); // 対象テキスト
+    // エラー文言初期化処理
     document.getElementById(error_id).textContent = '';
-
+    // 最大文字数チェック
     if (input.value.length > maxLength) {
         input.style.backgroundColor = '#fcc'; // 背景色を赤に設定
         document.getElementById(error_id).textContent = `※入力文字数は最大${maxLength}文字です。`;
@@ -177,7 +180,7 @@ function checkLostTextFormat(input_id, error_id){
         return bool;
     }
 
-    
+    // 入力値が空かチェック
     if (input.value === ""){
         // 入力値が空の場合
         bool = false;

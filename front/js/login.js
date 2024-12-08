@@ -97,7 +97,7 @@ function loginErrorCheck(){
 function checkLoginFormat(input_id, error_id){
     let bool = true;
     var pattern = /[a-zA-Z0-9]+$/;
-    const minLength = 8;
+    const minLength = 5;
     const maxLength = 30; // 最大文字数
     const input = document.getElementById(input_id);
     // 初期化処理

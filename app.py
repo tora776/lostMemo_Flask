@@ -40,8 +40,7 @@ def lastLoginCheck():
         return jsonify({'result': False})
     # トークン発行から24時間以上経っている場合、Falseを返す。
     dt1 = datetime.datetime.now() - ret[0][0]
-    print(dt1.seconds)
-    if dt1.seconds > 86400:
+    if dt1.days > 1:
         return jsonify({'result': False})
     return jsonify({'result': True})
 

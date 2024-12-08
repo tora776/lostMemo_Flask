@@ -1,67 +1,165 @@
-@import url('./style.css');
+/* フォントの指定 */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
 
-table,
-table th,
-table td,
-table tr{
-    background: #eee;
-    border-collapse: collapse;
+h1 {
     text-align: center;
-    border:1px solid #000000;
-    margin: auto;
-    padding: 10px 30px 10px 30px;
+    color: #333;
+    font-size: 2em;
+    margin-bottom: 20px;
 }
 
-table tr:nth-child(odd) td {
-	background: #fff;
-}
-
-table tr:hover td{
-    background:cadetblue;
-}
-
-
-.button {
-    display: inline-block;
-    color: #fff;
-    background-color: #eb6100;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    box-sizing: border-box;
-}
-.button:hover{
-    color: #fff;
-    background: #f56500;
-  }
+/* ラベルのスタイル */
 .label-notice {
-    display: inline-block;
-    padding: 5px 10px;
-    background-color: #ebebeb;
+    display: block;
+    margin: 20px auto;
+    padding: 15px;
+    max-width: 600px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    line-height: 1.5;
+}
+
+/* フォームのスタイル */
+form {
+    max-width: 600px;
+    margin: 0 auto 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #555;
+}
+
+form input[type="text"] {
+    flex-grow: 1;
+    padding: 10px;
+    margin-left: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    position:relative;
-    /* left: 330px; */
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
 }
 
+form input[type="text"]:focus {
+    border-color: #66afe9;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(102, 175, 233, 0.6);
+}
+
+form input[type="password"] {
+    flex-grow: 1;
+    padding: 10px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 1em;
+}
+
+form input[type="password"]:focus {
+    border-color: #66afe9;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(102, 175, 233, 0.6);
+}
+
+/* エラーメッセージ */
 .error-message {
     color: red;
-    margin-left: 10px; /* 入力欄から少し間隔を空ける */
-    font-size: 0.9em; /* 少し小さめのフォントサイズ */
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block;
 }
 
-/* formの位置調整 */
-/*
-form {
-    margin-top: -130px;
-}  */
-
-/* ラベルとフォーム要素のスタイル調整 */
-/*
-form label {
+/* ボタンのスタイル */
+.button {
     display: inline-block;
-    margin-bottom: 10px;
+    width: calc(25% - 15px);
+    margin: 10px 5px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    text-decoration: none;
 }
-*/
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+/* テーブルのスタイル */
+table {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    color: #555;
+}
+
+table th {
+    background-color: #007bff;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 1px;
+}
+
+table tr:hover td {
+    background-color: #f1f1f1;
+    transition: background-color 0.3s ease;
+}
+
+table tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+/* レスポンシブ対応 */
+@media screen and (max-width: 768px) {
+    form label {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    form input[type="text"] {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .button {
+        width: 100%;
+    }
+}

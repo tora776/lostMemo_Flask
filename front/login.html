@@ -6,14 +6,12 @@
     <link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
   <body>
-      <form id="inquiry">
-        <p class="fsize">ログイン画面</p>
         <label class="label-notice">
           説明
           <br>
           ・ユーザーID・パスワードはアルファベット大文字・小文字・数字（8文字以上30文字以下）を入力してください。
         </label>
-        <br>
+      <form id="inquiry">
         <label>ユーザーID
           <input type="text" id="user_id" name="user_id" placeholder="ユーザーID" />
           <span class="error-message" id="error_user_id"></span>
@@ -23,7 +21,6 @@
           <input type="password" id="password"  name="password" placeholder="パスワード" />
           <span class="error-message" id="error_password"></span>
         </label>
-        <br></br>
         <input type="button" class="button" id="loginBtn" value="ログイン">
         <input type="button" class="button" id="createUserBtn" value="ユーザー作成">
       </form>
