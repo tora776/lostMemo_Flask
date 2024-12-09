@@ -92,7 +92,7 @@ function indexBack(ev){
     const user_id = params.get("user_id"); 
     const token = params.get("token");
     // index.htmlへ遷移
-    window.location.href = 'index.html' + '?user_id=' + user_id + "&token=" + token;
+    window.location.href = 'index.html';
 };
 
 function makeUpdateJson(){

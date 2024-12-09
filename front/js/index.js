@@ -18,6 +18,7 @@ async function searchItem(ev){
                 method: "POST",
                 // body: JSON.stringify(data, ["items", "places", "detailed_places"]),
                 body: sendDataJson,
+                credentials: 'include', // クッキーを含める
             });
 
             const json = await response.json();
@@ -53,6 +54,7 @@ async function insertItem(ev){
                 'Content-Type': 'application/json'
             },
             body: sendDataJson,
+            credentials: 'include', // クッキーを含める
         });
 
         window.alert("送信しました。");
@@ -89,6 +91,7 @@ async function deleteItem(ev){
         const response = await window.fetch("http://127.0.0.1:5000/DeleteItem", {
             method: "POST",
             body: JSON.stringify(checkedRows),
+            credentials: 'include', // クッキーを含める
         });
 
         window.alert("送信しました。");
@@ -120,7 +123,7 @@ async function moveUpdatePage(ev){
   const user_id = params.get("user_id"); 
   const token = params.get("token");
   // update.htmlへ遷移
-  window.location.href = 'update.html' + '?user_id=' + user_id + "&token=" + token;
+  window.location.href = 'update.html';
 };
 
 async function checkToken(){
@@ -141,6 +144,7 @@ async function checkToken(){
         const response = await window.fetch("http://127.0.0.1:5000/lastLoginCheck", {
             method: "POST",
             body: loginJSON,
+            credentials: 'include', // クッキーを含める
         });
 
         // 処理結果を受け取る

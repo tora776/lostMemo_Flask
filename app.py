@@ -1,11 +1,13 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from sql import DB
 from data import createLostJson, getInsertList, sortColumn, getDeleteList, getUpdateList, encrypt, decrypt
-import secrets, datetime, hashlib
+import secrets, datetime, hashlib, jwt, os
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
+# 強力なランダム文字列を設定（推奨）
+app.config['SECRET_KEY'] = os.urandom(24).hex()
 
 # login処理
 @app.route('/login', methods=['POST'])
@@ -19,30 +21,39 @@ def login():
     ret = db.userCheck(user_id, password_hash)
     if not ret:
         return "ユーザーIDかパスワードが異なります"
-    token = secrets.token_hex()
     # ユーザーIDはハッシュ化してはいけない。元に戻せない。要修正。
     user_id_hash = hashlib.sha256(user_id.encode("utf-8")).hexdigest()
+    # トークン有効期限
+    expdate = datetime.datetime.now() + datetime.timedelta(days=1)
+    # cookieに含めるトークンを記載
+    token = jwt.encode({
+        'user_id': user_id,
+        'exp': int(expdate.timestamp())
+    }, app.config['SECRET_KEY'], algorithm='HS256')
     # 暗号化
-    #encrypted_user_id = encrypt(user_id, "fb57965850625a43d1f1fcb278e957f848f4e77ae3634160eab46a3446e6eb99")
     db.tokenRegister(user_id_hash, token)
-    
-    return jsonify({'user_id': user_id_hash, 'token':token})
+    # HttpOnly, Secure 属性付きクッキーにトークンを保存
+    response = make_response(jsonify({'message': 'Login successful'}))
+    response.set_cookie('auth_token', token, httponly=False, secure=False, samesite='Strict')
+    return response
 
 # 最終ログイン日時確認
 @app.route('/lastLoginCheck', methods=['POST', 'GET'])
 def lastLoginCheck():
-    db = DB()
-    result = request.get_data()
-    dataList = sortColumn(result)
-    ret = db.lastLoginCheckQuery(dataList)
-    # クエリ結果が存在しない場合、Falseを返す。Noneの想定。
-    if not ret[0][0]:
-        return jsonify({'result': False})
-    # トークン発行から24時間以上経っている場合、Falseを返す。
-    dt1 = datetime.datetime.now() - ret[0][0]
-    if dt1.days > 1:
-        return jsonify({'result': False})
-    return jsonify({'result': True})
+    token = request.cookies.get('auth_token')  # クッキーからトークンを取得
+    print(token)
+    if not token:
+        return jsonify({'message': 'Token is missing'}), 401
+
+    try:
+        # トークンをデコード
+        decoded = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        print(decoded)
+        return jsonify({'message': 'Welcome!', 'user_id': decoded['user_id']})
+    except jwt.ExpiredSignatureError:
+        return jsonify({'message': 'Token has expired'}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({'message': 'Invalid token'}), 401
 
 # ユーザー作成
 @app.route('/createUser', methods=['POST'])

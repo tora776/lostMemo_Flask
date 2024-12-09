@@ -5,6 +5,7 @@
 
 // tokenの発行日付を確認する
 async function checkToken(){
+    /*
     // 現在のページのクエリパラメータを取得
     const params = new URLSearchParams(window.location.search);
     // パラメータを取得
@@ -16,12 +17,13 @@ async function checkToken(){
         "token": token
     }
     const loginJSON = JSON.stringify(obj, null);
+    */
 
     try {
         // APIコール
         const response = await window.fetch("http://127.0.0.1:5000/lastLoginCheck", {
             method: "POST",
-            body: loginJSON,
+            credentials: 'include', // クッキーを含める
         });
 
         // 処理結果を受け取る
