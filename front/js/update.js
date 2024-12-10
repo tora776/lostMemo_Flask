@@ -1,4 +1,5 @@
-function readCheckedRows_Update(){
+// セッションストレージの値を取得する
+function getSessionStorageValue(){
         if (window.location.pathname.endsWith('update.html')) {
             const checkedRows = sessionStorage.getItem('checkedRows');
             // セッションストレージに保存された値を整形
@@ -32,6 +33,7 @@ function transformArray(arr) {
     return result;
   }
 
+// update.htmlにてテーブルを作成する
 function makeForm(json) {
     // table要素を生成
     var table = document.createElement('table');
@@ -100,6 +102,7 @@ function indexBack(ev){
     window.location.href = 'index.html' + '?user_id=' + user_id + "&token=" + token;
 };
 
+// 更新対象のjsonを作成する
 function makeUpdateJson(){
     var table = document.getElementById('Formtable');
     var rows = table.getElementsByTagName('tr');
@@ -125,7 +128,7 @@ function makeUpdateJson(){
             }
             checkedRows.push(rowData);
     }
-    
+    // 入力値にエラーがある場合、nullを返す
     if(isValid === false){
         return null;
     }
@@ -170,44 +173,3 @@ async function updateSendServer(ev){
       }
           
   };
-
-/*
-// 紛失物のテキストボックスの書式をチェックする
-function checkLostTextFormat_Update(input, errorMessage){
-    let bool = true;
-    // アルファベット大文字・小文字・数字・日本語・「-」「･」「_」のみ許可
-    var pattern = /^[a-zA-Z0-9\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf-･_]+$/;
-    const maxLength = 100; // 最大文字数
-    // エラー文言初期化処理
-    errorMessage.textContent = '';
-    // 最大文字数チェック
-    if (input.value.length > maxLength) {
-        input.style.backgroundColor = '#fcc'; // 背景色を赤に設定
-        errorMessage.textContent = `※入力文字数は最大${maxLength}文字です。`;
-        bool = false;
-        return bool;
-    }
-
-    // 入力値が空かチェック
-    if (input.value === ""){
-        // 入力値が空の場合
-        bool = false;
-        input.style.backgroundColor = '#fcc';
-        errorMessage.textContent = '※入力値が空です';
-        bool = false;
-    } else {
-        // 入力値が空でない場合
-        if (pattern.test(input.value)){
-            // 入力値に「-」「･」「_」以外の記号が含まれている場合
-            input.style.backgroundColor = '#fff';
-        } else {
-            // 入力値に「-」「･」「_」以外の記号が含まれていない場合
-            input.style.backgroundColor = '#fcc';
-            errorMessage.textContent = `※入力値に「-」「･」「_」以外の記号は使えません（${maxLength}文字以内）`;
-            bool = false;
-        }
-    }
-
-    return bool;
-}
-*/

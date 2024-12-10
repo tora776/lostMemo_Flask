@@ -66,10 +66,18 @@ function makeTable(json){
     // table要素を生成
     var table = document.createElement('table');
   
-    // ヘッダーを作成
+    // テーブル行を作成
     var tr = document.createElement('tr');
-  
+    // テーブルヘッダーを作成
     var th = document.createElement('th');
+    // jsonにデータが格納されていない場合、「検索結果なし」と表記する
+    if(json.length === 0){
+        th.textContent = "検索結果なし"
+        table.appendChild(th);
+        // 生成したtable要素を追加する
+        document.getElementById('maintable').appendChild(table);
+        return;
+    }
     // th要素内にテキストを追加
     th.textContent = "check";
     // th要素をtr要素の子要素に追加
@@ -123,9 +131,7 @@ function setupRowClickEvent(){
 
     // テーブル内の各行にクリックイベントリスナーを追加
     for (const row of rows) {
-        row.addEventListener("click", function (event) {
-
-        console.log(event.target.type)
+        row.addEventListener("click", function () {
         // 行の先頭にあるチェックボックスを取得
         const checkbox = this.cells[0].querySelector("input[type='checkbox']");
         
@@ -162,47 +168,6 @@ function getCheckedRows() {
     return checkedRows;
 }
 
-/*
-// 紛失物のテキストボックスの書式をチェックする
-function checkLostTextFormat(input_id, error_id){
-    let bool = true;
-    // アルファベット大文字・小文字・数字・日本語・「-」「･」「_」のみ許可
-    var pattern = /^[a-zA-Z0-9\u30a0-\u30ff\u3040-\u309f\u3005-\u3006\u30e0-\u9fcf-･_]+$/;
-    const maxLength = 100; // 最大文字数
-    const input = document.getElementById(input_id); // 対象テキスト
-    // エラー文言初期化処理
-    document.getElementById(error_id).textContent = '';
-    // 最大文字数チェック
-    if (input.value.length > maxLength) {
-        input.style.backgroundColor = '#fcc'; // 背景色を赤に設定
-        document.getElementById(error_id).textContent = `※入力文字数は最大${maxLength}文字です。`;
-        bool = false;
-        return bool;
-    }
-
-    // 入力値が空かチェック
-    if (input.value === ""){
-        // 入力値が空の場合
-        bool = false;
-        input.style.backgroundColor = '#fcc';
-        document.getElementById(error_id).textContent = '※入力値が空です';
-        bool = false;
-    } else {
-        // 入力値が空でない場合
-        if (pattern.test(input.value)){
-            // 入力値に「-」「･」「_」以外の記号が含まれている場合
-            input.style.backgroundColor = '#fff';
-        } else {
-            // 入力値に「-」「･」「_」以外の記号が含まれていない場合
-            input.style.backgroundColor = '#fcc';
-            document.getElementById(error_id).textContent = `※入力値に「-」「･」「_」以外の記号は使えません（${maxLength}文字以内）`;
-            bool = false;
-        }
-    }
-
-    return bool;
-}
-*/
 
 // 紛失物のテキストボックスの書式をチェックする
 function checkLostTextFormat(input, errorMessage){
