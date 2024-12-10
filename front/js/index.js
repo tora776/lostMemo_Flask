@@ -189,11 +189,18 @@ function makeSendJson(){
 function indexErrorCheck(){
     // テキストボックスに値が格納されているか確認する
     let isValid = true;
+    // HTML要素を取得
+    const item = document.getElementById("item");
+    const place = document.getElementById("place");
+    const detailed_place = document.getElementById("detailed_place");
+    const error_item = document.getElementById("error_item");
+    const error_place = document.getElementById("error_place");
+    const error_detailed_place = document.getElementById("error_detailed_place");
 
     // 入力値の書式確認
-    if (!checkLostTextFormat("item", "error_item")) isValid = false;
-    if (!checkLostTextFormat("place", "error_place")) isValid = false;
-    if (!checkLostTextFormat("detailed_place", "error_detailed_place")) isValid = false;
+    if (!checkLostTextFormat(item, error_item)) isValid = false;
+    if (!checkLostTextFormat(place, error_place)) isValid = false;
+    if (!checkLostTextFormat(detailed_place, error_detailed_place)) isValid = false;
 
     return isValid
 }

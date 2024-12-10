@@ -83,39 +83,43 @@ async function createUser(ev){
         }
 };
 
+// ログイン時のエラーチェック
 function loginErrorCheck(){
     let isValid = true;
+    // HTML要素を取得
+    const user_id = document.getElementById("user_id");
+    const password = document.getElementById("password");
+    const error_user_id = document.getElementById("error_user_id");
+    const error_password = document.getElementById("error_password");
 
     // 入力値の書式チェック
-    if (!checkLoginFormat("user_id", "error_user_id")) isValid = false;
-    if (!checkLoginFormat("password", "error_password")) isValid = false;
+    if (!checkLoginFormat(user_id, error_user_id)) isValid = false;
+    if (!checkLoginFormat(password, error_password)) isValid = false;
 
     return isValid;
 }
 
 // ログイン時のテキストボックスの書式をチェックする
-function checkLoginFormat(input_id, error_id){
+function checkLoginFormat(input, error){
     let bool = true;
     var pattern = /[a-zA-Z0-9]+$/;
-    const minLength = 5;
+    const minLength = 5;  // 最小文字数
     const maxLength = 30; // 最大文字数
-    const input = document.getElementById(input_id);
     // 初期化処理
-    document.getElementById(error_id).textContent = '';
+    error.textContent = '';
 
     if (input.value === ""){
         // 入力値が空の場合
         bool = false;
         input.style.backgroundColor = '#fcc';
-        document.getElementById(error_id).textContent = '※入力値が空です';
-        bool = false;
+        error.textContent = '※入力値が空です';
     } else {
         // 入力値が空でない場合
 
         // 入力値が最小文字数を下回った場合
         if (input.value.length < minLength) {
             input.style.backgroundColor = '#fcc'; // 背景色を赤に設定
-            document.getElementById(error_id).textContent = `※${minLength}文字以上入力してください`;
+            error.textContent = `※${minLength}文字以上入力してください`;
             bool = false;
             return bool;
         }
@@ -123,7 +127,7 @@ function checkLoginFormat(input_id, error_id){
         // 入力値が最大文字数を超えた場合
         if (input.value.length > maxLength) {
             input.style.backgroundColor = '#fcc'; // 背景色を赤に設定
-            document.getElementById(error_id).textContent = `※入力文字数は最大${maxLength}文字です`;
+            error.textContent = `※入力文字数は最大${maxLength}文字です`;
             bool = false;
             return bool;
         }
@@ -134,7 +138,7 @@ function checkLoginFormat(input_id, error_id){
         } else {
             // 入力値がアルファベット大文字・小文字・数字のみでない場合
             input.style.backgroundColor = '#fcc';
-            document.getElementById(error_id).textContent = `※入力値はアルファベット大文字・小文字・数字です（${maxLength}文字以内）`;
+            error.textContent = `※入力値はアルファベット大文字・小文字・数字です（${maxLength}文字以内）`;
             bool = false;
         }
     }
