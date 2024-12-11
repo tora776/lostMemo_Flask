@@ -45,7 +45,7 @@ def lastLoginCheck():
     return jsonify({'result': True})
 
 # ユーザー作成
-@app.route('/createUser', methods=['POST'])
+@app.route('/registUser', methods=['POST'])
 def createUser():
     db = DB()
     result = request.get_data()
