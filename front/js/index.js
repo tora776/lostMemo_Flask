@@ -215,7 +215,7 @@ function makeTable(json) {
 
     // テーブルに表示するid列を作成
     var th = document.createElement('th');
-    th.textContent = "id_a";
+    th.textContent = "lost_id";
     tr.appendChild(th);
 
     // 最初のkeyを記録

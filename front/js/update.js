@@ -21,7 +21,7 @@ function transformArray(arr) {
     for (let i = 0; i < arr.length; i += chunkSize) {
         let chunk = arr.slice(i, i + chunkSize);
         let obj = {
-            id_a: chunk[0],
+            lost_id: chunk[0],
             id:chunk[1],
             date: chunk[2],
             items: chunk[3],
@@ -34,60 +34,81 @@ function transformArray(arr) {
     return result;
   }
 
-// update.htmlにてテーブルを作成する
-function makeForm(json) {
+  function makeForm(json) {
     // table要素を生成
     var table = document.createElement('table');
     // テーブル行を生成
     var tr = document.createElement('tr');
+
+    // 非表示にする列のキー
+    const hiddenKey = "id";
+    let hiddenColumnIndex = -1; // 非表示にする列のインデックスを保持
+    let columnIndex = 0; // 列のインデックス
+
     // ヘッダーを生成
-    var th = document.createElement('th');
-    // テーブルに要素を追加
     for (let key in json[0]) {
         // th要素を生成
         var th = document.createElement('th');
-        // th要素内にテキストを追加
         th.textContent = key;
-        // th要素をtr要素の子要素に追加
         tr.appendChild(th);
+
+        // 非表示にする列のインデックスを取得
+        if (key === hiddenKey) {
+            hiddenColumnIndex = columnIndex;
+        }
+        columnIndex++;
     }
-    // tr要素をtable要素の子要素に追加
+    // ヘッダー行をtableに追加
     table.appendChild(tr);
-  
+
     // テーブル本体を作成
     for (let i = 0; i < json.length; i++) {
-        // tr要素を生成
         var tr = document.createElement('tr');
-      
+        columnIndex = 0;
+
         for (let key in json[i]) {
             // td要素を生成
             var td = document.createElement('td');
-            // 入力フォーム内にチェックボックスの値を入力
-            if (key == "items" || key == "places" || key == "detailed_places"){
+
+            if (key == "items" || key == "places" || key == "detailed_places") {
                 // テキストボックスを作成
-                form = document.createElement('input');
+                let form = document.createElement('input');
                 form.setAttribute("value", json[i][key]);
                 form.className = "input";
+
                 // エラーメッセージを作成
                 var errorMessage = document.createElement("span");
                 errorMessage.className = "error-message";
+
                 // テキストボックス・エラーメッセージを追加
                 td.appendChild(form);
                 td.appendChild(errorMessage);
-          
             } else {
-            // td要素内にテキストを追加
-            td.textContent = json[i][key];
-            };
+                // td要素内にテキストを追加
+                td.textContent = json[i][key];
+            }
+
+            // 非表示列の場合、スタイルを設定
+            if (columnIndex === hiddenColumnIndex) {
+                td.style.display = "none";
+            }
+
             // td要素をtr要素の子要素に追加
             tr.appendChild(td);
+            columnIndex++;
         }
         // tr要素をtable要素の子要素に追加
         table.appendChild(tr);
     }
+
+    // ヘッダー行の非表示列もスタイルを設定
+    if (hiddenColumnIndex > -1) {
+        table.rows[0].cells[hiddenColumnIndex].style.display = "none";
+    }
+
     // 生成したtable要素を追加する
     document.getElementById('Formtable').appendChild(table);
-  }
+}
 
 // update.htmlにてindexに戻るボタンを押した際の処理
 document.getElementById("indexBtn").addEventListener('click', indexBack)
