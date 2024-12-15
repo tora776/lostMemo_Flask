@@ -39,8 +39,9 @@ def decrypt(encryptedData, passPhrase):
 
     return plaintext.decode(encoding='utf-8')
 
-    
+# DBの戻り値をjson化し、フロントへ返す
 def createLostJson(ret):
+    # 戻り値を辞書型に成形
     df = pd.DataFrame(ret, columns = ['id', 'date', 'items', 'places', 'detailed_places'])
     dict = df.to_dict(orient="records")
     # date型, datetime型はjsonシリアライズができない
@@ -57,23 +58,27 @@ def json_serial(obj):
     raise TypeError ("Type %s not serializable" % type(obj))
 
 
-# テキストボックスから受け取ったデータを抽出
+# フロントから受け取ったデータを抽出し、追加データを作成する
 def getInsertList(res):
+    # フロントの入力値を辞書型に成形する
     dictForm = json.loads(res)
+    # 辞書型のuser_id, losts, lost_places, detailed_placesのvalueを抽出する
     valueList = []
     valueList = list(dictForm.values()) 
-    print(valueList)
     return valueList
 
 # チェックがついているidを抽出
 def getDeleteList(res):
+    # フロントの入力値を辞書型に成形する
     checkList = json.loads(res)
     idList = []
+    # フロントから取得したidを成形し、WHERE文の形に成形する
     for i in range(len(checkList)):
         idList.append((checkList[i][0]))
     idList_str = ",".join(idList)
     return idList_str
 
+# フロントから受け取った入力値をリストに格納する
 def getUpdateList(res):
     checkList = json.loads(res)
     idList = []
@@ -87,6 +92,7 @@ def getUpdateList(res):
         detailed_placeList.append((checkList[i][4]))
     return idList, itemList, placeList, detailed_placeList
 
+# 検索条件・検索する値をそれぞれのリストに格納する
 def sortColumn(res):
     dictForm = json.loads(res)
     condition_cols = []

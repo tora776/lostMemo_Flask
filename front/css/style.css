@@ -162,6 +162,11 @@ table tr:nth-child(odd) {
         width: 100%;
     }
 
+    form input[type="password"] {
+        margin-left: 0;
+        width: 100%;
+    }
+
     .button {
         width: 100%;
     }

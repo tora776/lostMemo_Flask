@@ -187,7 +187,7 @@ function checkInputCheckBox(checkBox_id){
 
 // テーブルを作成する
 function makeTable(json){
-  
+
     // maintable要素の中身をクリア
     const container = document.getElementById("maintable");
     container.innerHTML = '';
@@ -207,10 +207,21 @@ function makeTable(json){
         document.getElementById('maintable').appendChild(table);
         return;
     }
+    
+    // チェックボックス列を作成
     // th要素内にテキストを追加
     th.textContent = "check";
     // th要素をtr要素の子要素に追加
     tr.appendChild(th);
+
+    // テーブルに表示するid列を作成
+    // テーブルヘッダーを作成
+    var th = document.createElement('th');
+    // th要素内にテキストを追加
+    th.textContent = "id_a";
+    // th要素をtr要素の子要素に追加
+    tr.appendChild(th);
+
   
     for (key in json[0]) {
           // th要素を生成
@@ -249,6 +260,12 @@ function makeTable(json){
         }
         
       });
+      // id_a列を作成
+      var td = document.createElement('td');
+      // td要素内にテキストを追加
+      td.textContent = i + 1;
+      // td要素をtr要素の子要素に追加
+      tr.appendChild(td);
   
       // th・td部分のループ
       for (key in json[0]) {
@@ -259,6 +276,7 @@ function makeTable(json){
             // td要素をtr要素の子要素に追加
             tr.appendChild(td);
           }
+        
         // tr要素をtable要素の子要素に追加
         table.appendChild(tr);
       }
