@@ -16,16 +16,17 @@ function transformArray(arr) {
     let result = [];
     
     // 1回に処理する要素数
-    const chunkSize = 5;
+    const chunkSize = 6;
     
     for (let i = 0; i < arr.length; i += chunkSize) {
         let chunk = arr.slice(i, i + chunkSize);
         let obj = {
-            id: chunk[0],
-            date: chunk[1],
-            items: chunk[2],
-            places: chunk[3],
-            detailed_places: chunk[4]
+            id_a: chunk[0],
+            id:chunk[1],
+            date: chunk[2],
+            items: chunk[3],
+            places: chunk[4],
+            detailed_places: chunk[5]
         };
         result.push(obj);
     }
@@ -112,7 +113,8 @@ function makeUpdateJson(){
     for (var i = 1; i < rows.length; i++) { 
             var rowData = [];
             var cells = rows[i].getElementsByTagName('td');
-            for (var j = 0; j < cells.length; j++) { 
+            // id_a列は含まないので、j = 1となる。
+            for (var j = 1; j < cells.length; j++) { 
                 if(cells[j].innerHTML.indexOf('input') != -1) {
                   // テキストボックスの場合
                   // テーブル内のHTML要素を取得
@@ -144,6 +146,7 @@ async function updateSendServer(ev){
       ev.preventDefault();
 
       checkedRows = makeUpdateJson();
+      console.log(checkedRows);
       // テキストにエラーがある場合、処理を終了する
       if(checkedRows === null){
         return;
