@@ -74,7 +74,7 @@ def getDeleteList(res):
     idList = []
     # フロントから取得したidを成形し、WHERE文の形に成形する
     for i in range(len(checkList)):
-        idList.append((checkList[i][0]))
+        idList.append((checkList[i][1]))
     idList_str = ",".join(idList)
     return idList_str
 
