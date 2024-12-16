@@ -5,38 +5,31 @@
 
 // tokenの発行日付を確認する
 async function checkToken(){
-    // 現在のページのクエリパラメータを取得
-    const params = new URLSearchParams(window.location.search);
-    // パラメータを取得
-    const user_id = params.get("user_id"); 
-    const token = params.get("token");
-    // JSONオブジェクト作成
-    var obj = {
-        "user_id": user_id,
-        "token": token
-    }
-    const loginJSON = JSON.stringify(obj, null);
-
     try {
         // APIコール
         const response = await window.fetch("http://127.0.0.1:5000/lastLoginCheck", {
             method: "POST",
-            body: loginJSON,
+            credentials: "include",
         });
 
         // 処理結果を受け取る
         const result = await response.json();
-
+        
         // bool値を取得
         const isValid = result.result;
-        console.log("Result:", isValid);
-        
-        
+        if(isValid === undefined){
+            // エラーメッセージをコンソールへ表示
+            const errorMessage = result.message;
+            console.log("Result:", errorMessage);
+        }
+        /*
         // 必要に応じて処理
-        if (isValid == false) {
+        if (isValid === false) {
             alert("トークンの期限が切れています。再ログインしてください");
             window.location.href = 'login.html';
         }
+            */
+        
 
     } catch (e) {
         console.log(e);

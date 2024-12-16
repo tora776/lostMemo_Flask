@@ -178,6 +178,7 @@ async function updateSendServer(ev){
           const response = await window.fetch("http://127.0.0.1:5000/UpdateItem", {
               method: "POST",
               body: JSON.stringify(checkedRows),
+              credentials: "include",
           });
 
           window.alert("送信しました。");

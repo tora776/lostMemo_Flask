@@ -21,18 +21,21 @@ async function loginCheck(ev){
         try {
             // APIコール
             const response = await window.fetch("http://127.0.0.1:5000/login", {
-                method: "POST",
+                method: "POST", 
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data, ["user_id", "password"]),
+                credentials: "include",
             });
-           
+            
             // tokenをサーバから受け取りリダイレクトする。
             const res = await response.json();
             if(res != null){
-                window.location.href = 'index.html' + '?user_id=' + res.user_id + "&token=" + res.token;
+                window.location.href = 'index.html';
             }
+            
+            
             
 
         } catch (e) {
@@ -64,6 +67,7 @@ async function createUser(ev){
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data, ["user_id", "password"]),
+                credentials: "include",
             });
             
 

@@ -18,6 +18,7 @@ async function searchItem(ev){
                 method: "POST",
                 // body: JSON.stringify(data, ["items", "places", "detailed_places"]),
                 body: sendDataJson,
+                credentials: "include",
             });
 
             const json = await response.json();
@@ -53,6 +54,7 @@ async function insertItem(ev){
                 'Content-Type': 'application/json'
             },
             body: sendDataJson,
+            credentials: "include",
         });
 
         window.alert("送信しました。");
@@ -89,6 +91,7 @@ async function deleteItem(ev){
         const response = await window.fetch("http://127.0.0.1:5000/DeleteItem", {
             method: "POST",
             body: JSON.stringify(checkedRows),
+            credentials: "include",
         });
 
         window.alert("送信しました。");
