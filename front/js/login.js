@@ -34,10 +34,6 @@ async function loginCheck(ev){
             if(res != null){
                 window.location.href = 'index.html';
             }
-            
-            
-            
-
         } catch (e) {
             console.log(e);
         }

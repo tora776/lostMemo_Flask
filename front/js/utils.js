@@ -16,8 +16,10 @@ async function checkToken(){
         const result = await response.json();
         
         // bool値を取得
-        const isValid = result.result;
-        if(isValid === undefined){
+        const message = result.message;
+        if(message === "Welcome!"){
+            return result.user_id;
+        } else {
             // エラーメッセージをコンソールへ表示
             const errorMessage = result.message;
             console.log("Result:", errorMessage);
@@ -28,7 +30,7 @@ async function checkToken(){
             alert("トークンの期限が切れています。再ログインしてください");
             window.location.href = 'login.html';
         }
-            */
+        */
         
 
     } catch (e) {

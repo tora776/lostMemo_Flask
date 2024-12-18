@@ -115,13 +115,8 @@ document.getElementById("indexBtn").addEventListener('click', indexBack)
 
 function indexBack(ev){
     ev.preventDefault();
-    // 現在のページのクエリパラメータを取得
-    const params = new URLSearchParams(window.location.search);
-    // パラメータを取得
-    const user_id = params.get("user_id"); 
-    const token = params.get("token");
     // index.htmlへ遷移
-    window.location.href = 'index.html' + '?user_id=' + user_id + "&token=" + token;
+    window.location.href = 'index.html';
 };
 
 // 更新対象のjsonを作成する
@@ -165,11 +160,12 @@ document.getElementById("changeBtn").addEventListener('click', updateSendServer)
 
 async function updateSendServer(ev){
       ev.preventDefault();
-
-      checkedRows = makeUpdateJson();
-      console.log(checkedRows);
+      // トークンを確認
+      var user_id = await checkToken();
+      // 送信データを作成
+      const sendDataJson = makeUpdateJson(user_id);
       // テキストにエラーがある場合、処理を終了する
-      if(checkedRows === null){
+      if(sendDataJson === null){
         return;
       }
       
@@ -177,7 +173,7 @@ async function updateSendServer(ev){
           // APIコール
           const response = await window.fetch("http://127.0.0.1:5000/UpdateItem", {
               method: "POST",
-              body: JSON.stringify(checkedRows),
+              body: JSON.stringify(sendDataJson),
               credentials: "include",
           });
 
@@ -188,10 +184,6 @@ async function updateSendServer(ev){
           sessionStorage.setItem('json', json);
           // index.htmlに遷移する
           indexBack(ev);
-
-          //const allQuery = sessionStorage.getItem('json');
-          //makeTable(allQuery);
-          //  });
 
       } catch (e) {
           console.log(e);

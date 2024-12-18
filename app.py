@@ -36,7 +36,7 @@ def login():
         db.tokenRegister(user_id_hash, token)
         # HttpOnly, Secure 属性付きクッキーにトークンを保存
         response = make_response(jsonify({'message': 'Login successful'}))
-        response.set_cookie('auth_token', token, httponly=False, secure=False, samesite='None')
+        response.set_cookie('auth_token', token, httponly=False, secure=True, samesite='None')
         return response
     except Exception as e:
         return jsonify({'error':e})
@@ -46,14 +46,13 @@ def login():
 @app.route('/lastLoginCheck', methods=['POST', 'GET'])
 def lastLoginCheck():
     token = request.cookies.get('auth_token')  # クッキーからトークンを取得
-    print(token)
     if not token:
         return jsonify({'message': 'Token is missing'}), 401
 
     try:
         # トークンをデコード
         decoded = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-        print(decoded)
+        # print(decoded)
         return jsonify({'message': 'Welcome!', 'user_id': decoded['user_id']})
     except jwt.ExpiredSignatureError:
         return jsonify({'message': 'Token has expired'}), 401

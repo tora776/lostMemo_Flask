@@ -8,15 +8,14 @@ document.getElementById("searchBtn").addEventListener('click', searchItem)
 async function searchItem(ev){
     ev.preventDefault();
     // トークンと最終ログイン日時をチェックする
-    checkToken();
+    var user_id = await checkToken();
 
-    const sendDataJson = makeSendJson();
+    const sendDataJson = makeSendJson(user_id);
 
         try {
             // APIコール
             const response = await window.fetch("http://127.0.0.1:5000/SortItem", {
                 method: "POST",
-                // body: JSON.stringify(data, ["items", "places", "detailed_places"]),
                 body: sendDataJson,
                 credentials: "include",
             });
@@ -35,7 +34,7 @@ document.getElementById("insertBtn").addEventListener('click', insertItem)
 async function insertItem(ev){
     ev.preventDefault();
     // トークンと最終ログイン日時をチェックする
-    checkToken();
+    var user_id = await checkToken();
 
     // エラーチェック
     var ret = indexErrorCheck();
@@ -44,7 +43,7 @@ async function insertItem(ev){
     }
 
     // 追加するデータを作成する
-    const sendDataJson = makeSendJson();
+    const sendDataJson = makeSendJson(user_id);
 
     try {
         // APIコール
@@ -117,21 +116,14 @@ async function moveUpdatePage(ev){
     return;
     }
   sessionStorage.setItem('checkedRows', checkedRows);
-  // 現在のページのクエリパラメータを取得
-  const params = new URLSearchParams(window.location.search);
-  // パラメータを取得
-  const user_id = params.get("user_id"); 
-  const token = params.get("token");
+
   // update.htmlへ遷移
-  window.location.href = 'update.html' + '?user_id=' + user_id + "&token=" + token;
+  window.location.href = 'update.html';
 };
 
 
-function makeSendJson(){
-    // 現在のページのクエリパラメータを取得
-    const params = new URLSearchParams(window.location.search);
+function makeSendJson(user_id){
     // パラメータを取得
-    const user_id = params.get("user_id"); 
     const item = document.getElementById("item").value;
     const place = document.getElementById("place").value;
     const detailed_place = document.getElementById("detailed_place").value;
