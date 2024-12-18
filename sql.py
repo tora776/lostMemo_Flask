@@ -271,7 +271,6 @@ class DB():
         cols = ['user_id', 'token','login_date']
         vals = [user_id, token, 'CURRENT_TIMESTAMP']
         query = self.insertQuery(table, cols, vals)
-        print(query)
         # Query実行
         ret = self.sqlExcute(query)
         return ret

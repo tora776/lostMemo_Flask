@@ -7,7 +7,8 @@ import secrets, datetime, hashlib, os, jwt
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 # 強力なランダム文字列を設定（推奨）
-app.config['SECRET_KEY'] = os.urandom(24).hex()
+# app.config['SECRET_KEY'] = os.urandom(24).hex()
+app.config['SECRET_KEY'] = "hgA1beolJN76jv3wWnmzj"
 
 # login処理
 @app.route('/login', methods=['POST'])
@@ -36,7 +37,7 @@ def login():
         db.tokenRegister(user_id_hash, token)
         # HttpOnly, Secure 属性付きクッキーにトークンを保存
         response = make_response(jsonify({'message': 'Login successful'}))
-        response.set_cookie('auth_token', token, httponly=False, secure=True, samesite='None')
+        response.set_cookie('auth_token', token, httponly=False, secure=True, samesite='Lax')
         return response
     except Exception as e:
         return jsonify({'error':e})
@@ -52,8 +53,21 @@ def lastLoginCheck():
     try:
         # トークンをデコード
         decoded = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-        # print(decoded)
-        return jsonify({'message': 'Welcome!', 'user_id': decoded['user_id']})
+        db = DB()
+        # トークン格納テーブルに格納する際にユーザーIDを暗号化する
+        user_id_hash = hashlib.sha256(decoded['user_id'].encode("utf-8")).hexdigest()
+        condition_cols = ['user_id']
+        condition_vals = [user_id_hash]
+        columnList = [condition_cols, condition_vals]
+        ret = db.lastLoginCheckQuery(columnList)
+        tokenGetDate = ret[0][0]
+        dt1 = datetime.datetime.now() - tokenGetDate
+        # クエリ結果が存在しない場合、Falseを返す。Noneの想定。
+        if not tokenGetDate:
+            return jsonify({'message': 'トークンが存在しません'})
+        # トークンの格納日付を確認する
+        if dt1.days < 1:  
+            return jsonify({'message': 'Welcome!'})
     except jwt.ExpiredSignatureError:
         return jsonify({'message': 'Token has expired'}), 401
     except jwt.InvalidTokenError:
@@ -96,6 +110,10 @@ def GetSelectItems():
         db = DB()
         result = request.get_data()
         columnList = sortColumn(result)
+        # ユーザーIDを取得し、検索リストに追加する
+        user_id = getUser_ID()
+        columnList[0].append('user_id')
+        columnList[1].append(user_id)
         ret = db.select_data(columnList)
         return createLostJson(ret)
     except Exception as e:
@@ -107,8 +125,13 @@ def InsertItems():
     try:
         result = request.get_data()
         dataList = getInsertList(result)
+        # ユーザーIDを取得し、検索リストに追加する
+        user_id = getUser_ID()
+        items = dataList[0]
+        places = dataList[1]
+        detailed_places = dataList[2]
         db = DB()
-        db.insert_data(dataList[0], dataList[1], dataList[2], dataList[3])
+        db.insert_data(user_id, items, places, detailed_places)
         return dataList
     except Exception as e:
         return jsonify({'error':e})
@@ -121,8 +144,6 @@ def DeleteItems():
         result = request.get_data()
         idList_str = getDeleteList(result)
         ret = db.delete_data(idList_str)
-        # ret = db.selectAll()
-        #return createLostJson(ret) 
         return jsonify({'result': ret})
     except Exception as e:
         return jsonify({'error':e})
@@ -141,6 +162,18 @@ def UpdateItems():
     except Exception as e:
         return jsonify({'error':e})
 
+def getUser_ID():
+    token = request.cookies.get('auth_token')  # クッキーからトークンを取得
+    if not token:
+        return jsonify({'message': 'Token is missing'}), 401
+
+    try:
+        # トークンをデコード
+        decoded = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        # トークン格納テーブルに格納する際にユーザーIDを暗号化する
+        return decoded['user_id']
+    except:
+        return None
 
 
 # Webサーバを起動する。ポートはiisで指定。

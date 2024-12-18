@@ -18,7 +18,7 @@ async function checkToken(){
         // bool値を取得
         const message = result.message;
         if(message === "Welcome!"){
-            return result.user_id;
+            console.log(result.message);
         } else {
             // エラーメッセージをコンソールへ表示
             const errorMessage = result.message;
